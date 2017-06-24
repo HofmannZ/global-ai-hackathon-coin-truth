@@ -1,0 +1,19 @@
+SELECT
+  created_utc,
+  id,
+  parent_id,
+  body,
+  name,
+  author,
+  author_flair_text,
+  downs,
+  ups,
+  score,
+  controversiality,
+  gilded,
+  subreddit,
+  link_id
+FROM
+  [fh-bigquery.reddit_comments.2014]
+WHERE
+  subreddit IN ('Bitcoin', 'ethereum')
