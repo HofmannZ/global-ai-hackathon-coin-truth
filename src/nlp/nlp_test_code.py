@@ -25,6 +25,8 @@ X = vectorizer.fit_transform(df.txt)
 
 # split dataset
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+print(X_train)
+print(y_test)
 
 # train the naive bayes classifier
 clf = naive_bayes.MultinomialNB()
