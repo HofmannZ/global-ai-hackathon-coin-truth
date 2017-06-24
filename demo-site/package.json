@@ -1,0 +1,24 @@
+{
+  "name": "coin-truth",
+  "version": "0.1.0",
+  "private": false,
+  "dependencies": {
+    "material-ui": "next",
+    "material-ui-icons": "^1.0.0-alpha.19",
+    "normalize.css": "^7.0.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-stockcharts": "^0.6.1",
+    "typeface-roboto": "^0.0.29"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
