@@ -20,7 +20,7 @@ import MailIcon from 'material-ui-icons/Mail';
 import DeleteIcon from 'material-ui-icons/Delete';
 
 // Components
-import GithubIcon from '../GithubIcon';
+import GithubIcon from '../components/GithubIcon';
 
 // Type checking & defaults
 const propTypes = {

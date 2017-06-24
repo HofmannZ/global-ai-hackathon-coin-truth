@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": false,
   "dependencies": {
+    "d3-format": "^1.2.0",
+    "history": "^4.6.3",
     "material-ui": "next",
     "material-ui-icons": "^1.0.0-alpha.19",
     "normalize.css": "^7.0.0",
@@ -10,6 +12,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-stockcharts": "^0.6.1",
+    "router": "^1.3.1",
     "typeface-roboto": "^0.0.29"
   },
   "devDependencies": {
