@@ -8,7 +8,7 @@ import { timeFormat } from 'd3-time-format';
 // Material UI
 import {
   blue,
-  teal,
+  pink,
 } from 'material-ui/styles/colors';
 
 import { ChartCanvas, Chart, series, scale, coordinates, axes, helper } from 'react-stockcharts';
@@ -27,7 +27,7 @@ class GroupedBars extends React.Component {
 		const { data, type, width, ratio } = this.props;
 
 		return (
-			<ChartCanvas ratio={ratio} width={width} height={400}
+			<ChartCanvas ratio={ratio} width={width} 
 					margin={{left: 80, right: 80, top:10, bottom: 30}} type={type}
 					seriesName="MSFT"
 					data={data}
@@ -45,20 +45,20 @@ class GroupedBars extends React.Component {
 						orient="left"
 						displayFormat={format(".4s")} />
 
-          <LineSeries yAccessor={d => d.truthscore} stroke={teal[600]}/>
 					<BarSeries yAccessor={d => d.impact_count} fill={blue[500]} />
+          <LineSeries yAccessor={d => d.truthscore} stroke={pink[600]}/>
 
-          <CurrentCoordinate yAccessor={d => d.truthscore} fill={teal[500]} />
-					<CurrentCoordinate yAccessor={d => d.impact_count} fill={blue[500]} />
+          <CurrentCoordinate yAccessor={d => d.impact_count} fill={blue[500]} />
+          <CurrentCoordinate yAccessor={d => d.truthscore} fill={pink[500]} />
 
           <EdgeIndicator itemType="first" orient="left" edgeAt="left"
-						yAccessor={d => d.truthscore} displayFormat={format(".4s")} fill={teal[500]}/>
+            yAccessor={d => d.impact_count} displayFormat={format(".4s")} fill={blue[500]}/>
+          <EdgeIndicator itemType="last" orient="right" edgeAt="right"
+            yAccessor={d => d.impact_count} displayFormat={format(".4s")} fill={blue[500]}/>
+          <EdgeIndicator itemType="first" orient="left" edgeAt="left"
+						yAccessor={d => d.truthscore} displayFormat={format(".4s")} fill={pink[500]}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-						yAccessor={d => d.truthscore} displayFormat={format(".4s")} fill={teal[500]}/>
-					<EdgeIndicator itemType="first" orient="left" edgeAt="left"
-						yAccessor={d => d.impact_count} displayFormat={format(".4s")} fill={blue[500]}/>
-					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-						yAccessor={d => d.impact_count} displayFormat={format(".4s")} fill={blue[500]}/>
+						yAccessor={d => d.truthscore} displayFormat={format(".4s")} fill={pink[500]}/>
 				</Chart>
 				<CrossHairCursor />
 			</ChartCanvas>
