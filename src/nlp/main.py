@@ -10,24 +10,46 @@ import numpy as np
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cross_validation import train_test_split
-from sklearn import naive_bayes
-from sklearn.metrics import confusion_matrix
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import cross_val_score
+
+from scipy.sparse import csr_matrix
 
 TEXT_PATH = r'~/\My Projects\AI_hackathon\notebooks\posts_ccompare_raw.csv'
 DATA_OUTPUT_PATH = r'~/\My Projects\AI_hackathon\notebooks\btc-ind.csv'
 
-# C:\Users\Giovanni\My Projects\AI_hackathon\notebooks
-
-# training a custom sentiment model on cryptochain data
-
 # read in the data from the csv
-text_body_df = pd.read_csv(TEXT_PATH, names=['text'])
-data_output_df = pd.read_csv(DATA_OUTPUT_PATH, names=['BTC_pd_T0'])
+cc = pd.read_csv(TEXT_PATH, index_col=0)
+targets = pd.read_csv(DATA_OUTPUT_PATH)
+
+# extract the timestamps
+cc['Timestamp'] = pd.to_datetime(cc['Timestamp'])
+
+# get the date from the bitcoin data
+targets['date'] = pd.to_datetime(targets['Date'])
+targets = targets.set_index('date')
+del targets['Date']
+
+# join data by date
+join_by_date = pd.DataFrame(index=cc.index)
+join_by_date['date'] = cc.Timestamp.dt.round(freq="d")
 
 
-# keep the body-feature of the csv
-text_body_df = text_body_df['text'][:2504]
+text = cc['Body']
 
+features_date = pd.DataFrame(index=cc.index)
+features_date['t_week'] = cc.Timestamp.dt.week
+features_date['t_dow'] = cc.Timestamp.dt.dayofweek
+features_date['t_hour'] = cc.Timestamp.dt.hour
+features_date['t_day'] = cc.Timestamp.dt.day
+
+Y_all = join_by_date.join(targets, on='date').dropna()
+groups = Y_all['date']
+del Y_all['date']
+cols = Y_all.columns
+index = Y_all.index
+Y_all = Y_all - Y_all.mean()
+Y_all = Y_all/Y_all.std()
 
 # match the dates of the posts to the dates of the output data
 
@@ -35,47 +57,19 @@ text_body_df = text_body_df['text'][:2504]
 stopset = set(stopwords.words('english'))
 vectorizer = TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii', stop_words=stopset)
 
-X = vectorizer.fit_transform(text_body_df)
+X = vectorizer.fit_transform(text)
 
-y = data_output_df['BTC_pd_T0']
+features = pd.concat([features_date, pd.DataFrame(X.toarray())], axis=1)
+X_all = features.ix[Y_all.index]
 
+reg = RandomForestRegressor(n_estimators=10, max_depth=2, criterion='mse')
 
-# split dataset
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+target_scores = {}
+for indicator in targets.columns:
+	Y =Y_all[indicator]    
+	scores = cross_val_score(reg, X_all, Y, cv=5, groups=groups, scoring='neg_mean_squared_error')
+	target_scores[indicator] = scores
 
+cv_score = pd.DataFrame(target_scores)
+cv_score.to_csv('cv_output.csv')
 
-# train the naive bayes classifier
-clf = naive_bayes.MultinomialNB()
-clf.fit(X_train, y_train)
-
-# get accuracy of the model
-print(roc_auc_score(y_test, clf.predict_proba(X_test)[:,1]))
-
-# train the 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# save this to a new csv
-# manually annotate this data in three ways
-# positive, neutral, negative; positive means believes market goes up
-# negative means market goes down, neutral means no comment on market direction
-
-# there is a many to one relation between messages/post and the daily fluctiation  
