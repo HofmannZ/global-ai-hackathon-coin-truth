@@ -11,7 +11,6 @@ import {
   red,
   green,
   blue,
-  pink,
   orange,
   teal,
 } from 'material-ui/styles/colors';
@@ -137,7 +136,7 @@ HeikinAshi.propTypes = {
 };
 
 HeikinAshi.defaultProps = {
-	type: "svg",
+	type: "hybrid",
 };
 
 HeikinAshi = fitWidth(HeikinAshi);
