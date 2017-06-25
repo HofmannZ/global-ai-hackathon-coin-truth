@@ -18,7 +18,6 @@ import { CircularProgress } from 'material-ui/Progress';
 
 // Charts
 import HeikinAshi from '../../components/HeikinAshi';
-import GroupedBars from '../../components/GroupedBars';
 
 // Type checking & defaults
 const propTypes = {
@@ -47,7 +46,6 @@ class Demo extends Component {
 
     this.state = {
       data: [],
-      truthData: [],
     };
   }
 
@@ -90,7 +88,6 @@ class Demo extends Component {
   render() {
     const {
       data,
-      truthData,
     } = this.state;
     const { classes } = this.props;
 

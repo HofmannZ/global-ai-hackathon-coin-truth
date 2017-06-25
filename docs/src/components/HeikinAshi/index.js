@@ -112,12 +112,12 @@ class HeikinAshi extends React.Component {
 					<AreaSeries yAccessor={smaVolume50.accessor()} stroke={teal[600]} fill={teal[500]}/>
 
 					<CurrentCoordinate yAccessor={smaVolume50.accessor()} fill={teal[400]} />
-					<CurrentCoordinate yAccessor={d => d.volume} fill={black} />
+					<CurrentCoordinate yAccessor={d => d.volume} fill={d => d.close > d.open ? green[400] : red[400]} />
 
 					<EdgeIndicator itemType="first" orient="left" edgeAt="left"
-						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={black}/>
+						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={d => d.close > d.open ? green[500] : red[500]}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={black}/>
+						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={d => d.close > d.open ? green[500] : red[500]}/>
 					<EdgeIndicator itemType="first" orient="left" edgeAt="left"
 						yAccessor={smaVolume50.accessor()} displayFormat={format(".4s")} fill={teal[500]}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
