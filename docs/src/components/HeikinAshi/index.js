@@ -13,6 +13,7 @@ import {
   blue,
   orange,
   teal,
+  pink,
 } from 'material-ui/styles/colors';
 
 import { ChartCanvas, Chart, series, scale, coordinates, tooltip, axes, indicator, helper } from 'react-stockcharts';
@@ -53,7 +54,7 @@ class HeikinAshi extends React.Component {
 			.accessor(d => d.smaVolume50);
 
 		return (
-			<ChartCanvas ratio={ratio} width={width} height={400}
+			<ChartCanvas ratio={ratio} width={width} height={window.innerHeight - 384}
 					margin={{left: 80, right: 80, top:10, bottom: 30}} type={type}
 					seriesName="MSFT"
 					data={data} calculator={[ha, ema20, ema50, smaVolume50]}
@@ -111,16 +112,48 @@ class HeikinAshi extends React.Component {
 					<AreaSeries yAccessor={smaVolume50.accessor()} stroke={teal[600]} fill={teal[500]}/>
 
 					<CurrentCoordinate yAccessor={smaVolume50.accessor()} fill={teal[400]} />
-					<CurrentCoordinate yAccessor={d => d.volume} fill={black} />
+					<CurrentCoordinate yAccessor={d => d.volume} fill={d => d.close > d.open ? green[400] : red[400]} />
 
 					<EdgeIndicator itemType="first" orient="left" edgeAt="left"
-						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={black}/>
+						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={d => d.close > d.open ? green[500] : red[500]}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={black}/>
+						yAccessor={d => d.volume} displayFormat={format(".4s")} fill={d => d.close > d.open ? green[500] : red[500]}/>
 					<EdgeIndicator itemType="first" orient="left" edgeAt="left"
 						yAccessor={smaVolume50.accessor()} displayFormat={format(".4s")} fill={teal[500]}/>
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
 						yAccessor={smaVolume50.accessor()} displayFormat={format(".4s")} fill={teal[500]}/>
+				</Chart>
+        <Chart
+          id={3}
+          height={150}
+          yExtents={[d => [d.truthScore, d.impactCount]]}
+          origin={(w, h) => [0, h - 150]}
+        >
+          <XAxis axisAt="bottom" orient="bottom"/>
+					<YAxis axisAt="left" orient="left" ticks={5} tickFormat={format(".0s")}/>
+					<MouseCoordinateX
+						at="bottom"
+						orient="bottom"
+						displayFormat={timeFormat("%Y-%m-%d")} />
+					<MouseCoordinateY
+						at="left"
+						orient="left"
+						displayFormat={format(".4s")} />
+
+					<BarSeries yAccessor={d => d.impactCount} fill={blue[500]} />
+          <LineSeries yAccessor={d => d.truthScore} stroke={pink[600]}/>
+
+          <CurrentCoordinate yAccessor={d => d.impactCount} fill={blue[500]} />
+          <CurrentCoordinate yAccessor={d => d.truthScore} fill={pink[500]} />
+
+          <EdgeIndicator itemType="first" orient="left" edgeAt="left"
+            yAccessor={d => d.impactCount} displayFormat={format(".4s")} fill={blue[500]}/>
+          <EdgeIndicator itemType="last" orient="right" edgeAt="right"
+            yAccessor={d => d.impactCount} displayFormat={format(".4s")} fill={blue[500]}/>
+          <EdgeIndicator itemType="first" orient="left" edgeAt="left"
+						yAccessor={d => d.truthScore} displayFormat={format(".4s")} fill={pink[500]}/>
+					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
+						yAccessor={d => d.truthScore} displayFormat={format(".4s")} fill={pink[500]}/>
 				</Chart>
 				<CrossHairCursor />
 			</ChartCanvas>

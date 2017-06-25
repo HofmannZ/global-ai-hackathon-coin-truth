@@ -18,7 +18,6 @@ import { CircularProgress } from 'material-ui/Progress';
 
 // Charts
 import HeikinAshi from '../../components/HeikinAshi';
-import GroupedBars from '../../components/GroupedBars';
 
 // Type checking & defaults
 const propTypes = {
@@ -47,7 +46,6 @@ class Demo extends Component {
 
     this.state = {
       data: [],
-      truthData: [],
     };
   }
 
@@ -55,35 +53,41 @@ class Demo extends Component {
     const parsedData = JSON.parse(JSON.stringify(dataFile));
     const parsedTruthData = JSON.parse(JSON.stringify(truthFile));
 
-    const data = parsedData.map(item => ({
-      ...item,
-      date: new Date(item.time),
-      volume: item.volumeto,
-    }));
+    const data = parsedData.map(item => {
+      let truthScore = parsedTruthData.filter(truthItem => truthItem.date === item.time)[0];
+      let impactCount = parsedTruthData.filter(truthItem => truthItem.date === item.time)[0];
+
+      if (truthScore) {
+        truthScore = truthScore.truthscore;
+      } else {
+        truthScore = 0;
+      }
+
+      if (impactCount) {
+        impactCount = impactCount.impact_count;
+      } else {
+        impactCount = 0;
+      }
+
+      return {
+        ...item,
+        date: new Date(item.time),
+        volume: item.volumeto,
+        truthScore,
+        impactCount,
+      };
+    });
 
     console.log({ data });
 
     this.setState({
       data,
     });
-
-    const truthData = parsedTruthData.map(item => ({
-      ...item,
-      date: new Date(item.date),
-      // volume: item.volumeto,
-    }));
-
-    console.log({ truthData });
-
-    this.setState({
-      truthData,
-    });
   }
 
   render() {
     const {
       data,
-      truthData,
     } = this.state;
     const { classes } = this.props;
 
@@ -95,15 +99,6 @@ class Demo extends Component {
         { data.length > 0 ? (
           <Paper className={classes.content}>
             <HeikinAshi data={data} />
-          </Paper>
-        ) : (
-          <div className={classes.spinner}>
-            <CircularProgress />
-          </div>
-        )}
-        { data.length > 0 ? (
-          <Paper className={classes.content}>
-            <GroupedBars data={truthData} />
           </Paper>
         ) : (
           <div className={classes.spinner}>
