@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 // Data
 import dataFile from './data.json';
+import truthFile from './truth.json';
 
 // Material UI
 import {
@@ -46,11 +47,13 @@ class Demo extends Component {
 
     this.state = {
       data: [],
+      truthData: [],
     };
   }
 
   componentDidMount() {
     const parsedData = JSON.parse(JSON.stringify(dataFile));
+    const parsedTruthData = JSON.parse(JSON.stringify(truthFile));
 
     const data = parsedData.map(item => ({
       ...item,
@@ -58,15 +61,30 @@ class Demo extends Component {
       volume: item.volumeto,
     }));
 
+    console.log({ data });
+
     this.setState({
       data,
     });
 
-    console.log(data);
+    const truthData = parsedTruthData.map(item => ({
+      ...item,
+      date: new Date(item.date),
+      // volume: item.volumeto,
+    }));
+
+    console.log({ truthData });
+
+    this.setState({
+      truthData,
+    });
   }
 
   render() {
-    const { data } = this.state;
+    const {
+      data,
+      truthData,
+    } = this.state;
     const { classes } = this.props;
 
     return (
@@ -85,7 +103,7 @@ class Demo extends Component {
         )}
         { data.length > 0 ? (
           <Paper className={classes.content}>
-            <GroupedBars data={data} />
+            <GroupedBars data={truthData} />
           </Paper>
         ) : (
           <div className={classes.spinner}>

@@ -59,7 +59,7 @@ class HeikinAshi extends React.Component {
 					seriesName="MSFT"
 					data={data} calculator={[ha, ema20, ema50, smaVolume50]}
 					xAccessor={d => d.date} xScaleProvider={discontinuousTimeScaleProvider}
-					xExtents={[new Date(2012, 0, 1), new Date(2012, 6, 2)]}>
+					xExtents={[new Date(2017, 4, 1), new Date(2017, 5, 1)]}>
 				<Chart id={1}
 						yExtents={[d => [d.high, d.low], ema20.accessor(), ema50.accessor()]}
 						padding={{ top: 10, bottom: 20 }}>
@@ -70,7 +70,7 @@ class HeikinAshi extends React.Component {
 						orient="right"
 						displayFormat={format(".1f")} />
 
-					<CandlestickSeries />
+					<CandlestickSeries fill={d => d.close > d.open ? green[500] : red[500]} />
 					<LineSeries yAccessor={ema20.accessor()} stroke={blue[600]}/>
 					<LineSeries yAccessor={ema50.accessor()} stroke={orange[600]}/>
 
@@ -108,7 +108,7 @@ class HeikinAshi extends React.Component {
 						orient="left"
 						displayFormat={format(".4s")} />
 
-					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? green[500] : red[500]} />
+					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? green[500] : red[500]} stoke={black} />
 					<AreaSeries yAccessor={smaVolume50.accessor()} stroke={teal[600]} fill={teal[500]}/>
 
 					<CurrentCoordinate yAccessor={smaVolume50.accessor()} fill={teal[400]} />
