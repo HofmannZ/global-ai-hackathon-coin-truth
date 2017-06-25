@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Router
+import {
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom';
+
 // Material UI
 import {
   createStyleSheet,
   withStyles,
 } from 'material-ui/styles';
+import { black } from 'material-ui/styles/colors';
 import {
   AppBar,
   Toolbar,
@@ -13,11 +21,15 @@ import {
   Typography,
   IconButton,
 } from 'material-ui';
+import List, {
+  ListItem,
+  ListItemText,
+} from 'material-ui/List';
 
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-
-import MailIcon from 'material-ui-icons/Mail';
-import DeleteIcon from 'material-ui-icons/Delete';
+// Pages
+import Home from '../pages/Home';
+import Demo from '../pages/Demo';
+import Whitepaper from '../pages/Whitepaper';
 
 // Components
 import GithubIcon from '../components/GithubIcon';
@@ -30,12 +42,16 @@ const defaultProps = {};
 const contextTypes = {};
 
 // Styles
-const styleSheet = createStyleSheet('ButtonAppBar', {
+const styleSheet = createStyleSheet('App', {
   root: {
     width: '100%',
   },
   drawer: {
     width: 249,
+  },
+  link: {
+    textDecoration: 'none',
+    color: black,
   },
   main: {
     marginLeft: 249,
@@ -52,9 +68,7 @@ const styleSheet = createStyleSheet('ButtonAppBar', {
   content: {
     marginTop: 64,
     maxWidth: 900,
-  },
-  section: {
-    margin: '24px 0',
+    flex: 1,
   },
   flex: {
     flex: 1,
@@ -77,15 +91,30 @@ class App extends Component {
           open
         >
           <List>
-            <ListItem button>
-              <ListItemText primary="Home" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Demo" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Whitepaper" />
-            </ListItem>
+            <Link
+              className={classes.link}
+              to="/"
+            >
+              <ListItem button>
+                <ListItemText primary="Home" />
+              </ListItem>
+            </Link>
+            <Link
+              className={classes.link}
+              to="/demo"
+            >
+              <ListItem button>
+                <ListItemText primary="Demo" />
+              </ListItem>
+            </Link>
+            <Link
+              className={classes.link}
+              to="/whitepaper"
+            >
+              <ListItem button>
+                <ListItemText primary="Whitepaper" />
+              </ListItem>
+            </Link>
           </List>
         </Drawer>
         <main className={classes.main}>
@@ -99,7 +128,7 @@ class App extends Component {
                 type="title"
                 color="inherit"
               >
-                Coin truth
+                Global AI Hackathon 2017
               </Typography>
               <IconButton
                 color="contrast"
@@ -111,25 +140,11 @@ class App extends Component {
           </AppBar>
           <div className={classes.contentWrapper}>
             <section className={classes.content}>
-              <Typography type="display3" gutterBottom>
-                Global AI Hackathon 2017
-              </Typography>
-              <section className={classes.section}>
-                <Typography type="display1" gutterBottom>
-                  The challenge
-                </Typography>
-                <Typography type="body2" gutterBottom>
-                  The challenge is to build a model which will make it easier and more efficient to identify what really is fake news and what is not (+ everything in between). Our model should be able to determine a level of credibility, content authenticity, and limit the viral spread of fake content, including fake images.
-                </Typography>
-              </section>
-              <section className={classes.section}>
-                <Typography type="display1" gutterBottom>
-                  Our interpretation
-                </Typography>
-                <Typography type="body2" gutterBottom>
-                  We will narrow down our AI to finding fake news regarding flux in crypto currencies. In particular Bitcoin, this way we have a load of training data.
-                </Typography>
-              </section>
+              <Switch>
+                <Route exact path="/" component={Home}/>
+                <Route path="/demo" component={Demo}/>
+                <Route path="/whitepaper" component={Whitepaper}/>
+              </Switch>
             </section>
           </div>
         </main>
